@@ -1,3 +1,0 @@
-/usr/bin/ld: /tmp/ccTgmdja.o: in function `main':
-main.cpp:(.text.startup+0x0): multiple definition of `main'; /tmp/cc8GWRhu.o:gelu_omp.cpp:(.text.startup+0x0): first defined here
-collect2: error: ld returned 1 exit status
