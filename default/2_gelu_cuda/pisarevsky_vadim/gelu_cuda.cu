@@ -5,6 +5,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#ifdef HAVE_MIMALLOC
+#include <mimalloc-new-delete.h>
+#endif
+
 #include "gelu_cuda.h"
 
 __device__ __forceinline__ float fastTanh(float x) {
@@ -26,10 +30,7 @@ __global__ void GeluCUDAKernel(float* X, size_t n) {
     }
 }
 
-void GeluCUDA3xFaster(const std::vector<float>& input, std::vector<float>& output) {
-    size_t n = input.size();
-    const float* inptr = input.data();
-
+void GeluCUDA3xFaster(const float* inptr, float* outptr, size_t n) {
     float* X = nullptr;
     cudaMalloc(&X, n * sizeof(float));
     cudaMemcpy(X, inptr, n * sizeof(float), cudaMemcpyHostToDevice);
@@ -37,8 +38,6 @@ void GeluCUDA3xFaster(const std::vector<float>& input, std::vector<float>& outpu
     size_t threads = 256;
     size_t blocks = (n + threads - 1) / threads;
     GeluCUDAKernel<<<blocks, threads>>>(X, n);
-    output.resize(n);
-    float* outptr = output.data();
     cudaDeviceSynchronize();
 
     cudaMemcpy(outptr, X, n * sizeof(float), cudaMemcpyDeviceToHost);
@@ -46,8 +45,9 @@ void GeluCUDA3xFaster(const std::vector<float>& input, std::vector<float>& outpu
 }
 
 std::vector<float> GeluCUDA(const std::vector<float>& input) {
-    std::vector<float> output;
-    GeluCUDA3xFaster(input, output);
+    size_t n = input.size();
+    std::vector<float> output(n);
+    GeluCUDA3xFaster(input.data(), output.data(), n);
     return output;
 }
 
@@ -77,11 +77,7 @@ int main() {
     std::vector<double> time_list;
     for (int i = 0; i < 5; ++i) {
         auto start = std::chrono::high_resolution_clock::now();
-    #if 0
         auto ytmp = GeluCUDA(x);
-    #else
-        GeluCUDA3xFaster(x, y);
-    #endif
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> duration = end - start;
         time_list.push_back(duration.count());
