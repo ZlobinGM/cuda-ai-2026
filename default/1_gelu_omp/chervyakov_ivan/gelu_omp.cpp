@@ -26,17 +26,17 @@ namespace
         return s_Half * x * (s_One + tanh);
     }
 
-#pragma omp declare simd notinbranch
+/*#pragma omp declare simd notinbranch
     inline float geluTanh(float x) noexcept
     {
         const float x2 = x * x;
         const float inner = s_Sqrt2OverPi * x * (s_One + s_FactorX3 * x2);
         return s_Half * x * (s_One + std::tanh(inner));
     }
-
+*/
 }
 
-std::vector<float> geluTanhBase(const std::vector<float> &input)
+/*std::vector<float> geluTanhBase(const std::vector<float> &input)
 {
     const size_t n = input.size();
     std::vector<float> result(n);
@@ -50,7 +50,7 @@ std::vector<float> geluTanhBase(const std::vector<float> &input)
     }
 
     return result;
-}
+}*/
 
 std::vector<float> GeluOMP(const std::vector<float> &input)
 {
@@ -69,6 +69,7 @@ std::vector<float> GeluOMP(const std::vector<float> &input)
     return result;
 }
 
+/*
 inline std::vector<float> generateTestData(size_t size, float min_val = -5.0f, float max_val = 5.0f)
 {
     std::vector<float> data(size);
@@ -112,4 +113,4 @@ int main()
     printf("%f\n", time);
 
     return 0;
-}
+}*/
