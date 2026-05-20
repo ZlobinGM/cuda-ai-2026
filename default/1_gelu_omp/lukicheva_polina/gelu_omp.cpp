@@ -3,7 +3,6 @@
 #include <random>
 #include <chrono>
 
-
 #include "gelu_omp.h"
 
 double fast_tanh(double x) {
@@ -16,11 +15,12 @@ std::vector<float> GeluOMP(const std::vector<float>& input) {
     std::vector<float> output(nElems);
 
     constexpr float CONST_V = 0.044715f;
+    constexpr float SQRT_2_PI = std::sqrt(2.f / M_PI);
 
     #pragma omp parallel for
     for (size_t i = 0; i < nElems; ++i) {
         float el = input[i];
-        output[i] = 0.5f * el * (1 + fast_tanh(M_2_SQRTPI * el * (1.f +  CONST_V * el * el)));
+        output[i] = 0.5f * el * (1 + fast_tanh(SQRT_2_PI * el * (1.f +  CONST_V * el * el)));
     }
 
     return output;
@@ -29,11 +29,13 @@ std::vector<float> GeluOMP(const std::vector<float>& input) {
 std::vector<float> GeluRef(const std::vector<float>& input) {
     size_t nElems = input.size();
     std::vector<float> output(nElems);
+
     constexpr float CONST_VALUE = 0.044715f;
+    constexpr float SQRT_2_PI = std::sqrt(2.f / M_PI);
 
     for (size_t i = 0; i < nElems; ++i) {
         float el = input[i];
-        output[i] = 0.5f * el * (1 + std::tanh(M_2_SQRTPI * el * (1.f + CONST_VALUE * el * el)));
+        output[i] = 0.5f * el * (1 + std::tanh(SQRT_2_PI * el * (1.f + CONST_VALUE * el * el)));
     }
 
     return output;
