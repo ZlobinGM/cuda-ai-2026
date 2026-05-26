@@ -1,0 +1,5 @@
+/home/crazyproger/sandbox/cuda-ai-2026/default/2_gelu_cuda/chervyakov_ivan/gelu_cuda.cu(41): error: identifier "geluExpOptSingleBufferKernel" is undefined
+      cudaOccupancyMaxPotentialBlockSize(&minGridSize, &blockSize, (void *)geluExpOptSingleBufferKernel, 0, length);
+                                                                           ^
+
+1 error detected in the compilation of "/home/crazyproger/sandbox/cuda-ai-2026/default/2_gelu_cuda/chervyakov_ivan/gelu_cuda.cu".

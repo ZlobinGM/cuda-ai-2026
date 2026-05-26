@@ -7,20 +7,18 @@
 
 namespace {
 
-inline double fastTanh(const double x) {
-    if (x >= 4.97) return 1.0;
-    if (x <= -4.97) return -1.0;
-    double x2 = x * x;
-    double a = x * (135135.0 + x2 * (17325.0 + x2 * (378.0 + x2)));
-    double b = 135155.0 + x2 * (62370.0 + x2 * (3150.0 + x2 * 28.0));
-    return a / b;
+inline float fastTanh(const float x) {
+    if (abs(x) < 40.f) {
+        const float exp2X = std::exp(2*x);
+        return (exp2X - 1) / (exp2X + 1);
+    }
+    return std::tanh(x);
 }
 
 }
 
 std::vector<float> GeluOMP(const std::vector<float>& input) {
-    std::vector<float> result;
-    result.reserve(input.size());
+    std::vector<float> result(input.size());
 
     constexpr float sqr2_mpi = std::sqrt(2.f/M_PI);
     constexpr size_t BLOCK_SIZE = 8;

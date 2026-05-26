@@ -390,24 +390,42 @@ One may use numba or C strings to write CUDA kernels.
 |Group|Name|Result|Rank|
 |-----|----|------|----|
 |default|pisarevsky_vadim|0.0806|1|
+|default|lobanova_elizaveta|0.0838|4|
 |**FAST**|**FAST**|**0.0879**|**-**|
 |default|chekmaryov_petr|0.0882|3|
-|default|lobanova_elizaveta|0.1391|4|
+|default|zvorykin_aleksandr|0.1554|9|
+|default|chervyakov_ivan|0.1614|8|
 |default|smirnov_denis|0.1632|2|
+|default|zinoviev_vladimir|0.1664|5|
+|default|vikhrev_ivan|0.1686|12|
+|default|znamenskiy_mikhail|0.1723|7|
+|default|pinegina_natalia|0.2212|11|
+|default|lukicheva_polina|0.2277|10|
+|default|pigasin_dmitry|0.3863|6|
 |**REF**|**REF**|**0.4536**|**-**|
-|default|znamenskiy_mikhail|TEST FAILED|-|
+|default|zemskov_roman|TEST FAILED|-|
 
 ## 2_gelu_cuda (134217728 elements)
 |Group|Name|Result|Rank|
 |-----|----|------|----|
 |**FAST**|**FAST**|**0.1186**|**-**|
+|default|zvorykin_aleksandr|0.1598|8|
+|default|znamenskiy_mikhail|0.1648|6|
+|default|pisarevsky_vadim|0.1653|2|
+|default|lobanova_elizaveta|0.1680|3|
+|default|zinoviev_vladimir|0.1751|5|
 |default|smirnov_denis|0.1757|1|
 |**REF**|**REF**|**0.1864**|**-**|
+|default|pinegina_natalia|0.2180|7|
+|default|lukicheva_polina|0.2290|4|
+|default|chekmaryov_petr|TEST FAILED|-|
+|default|chervyakov_ivan|BUILD FAILED|-|
 
 ## 3_naive_gemm_cuda (4096 elements)
 |Group|Name|Result|Rank|
 |-----|----|------|----|
 |**FAST**|**FAST**|**0.0710**|**-**|
+|default|zinoviev_vladimir|0.2528|2|
 |default|smirnov_denis|0.2679|1|
 |**REF**|**REF**|**0.5748**|**-**|
 
@@ -415,6 +433,7 @@ One may use numba or C strings to write CUDA kernels.
 |Group|Name|Result|Rank|
 |-----|----|------|----|
 |**FAST**|**FAST**|**0.0695**|**-**|
+|default|smirnov_denis|0.1336|1|
 |**REF**|**REF**|**0.2981**|**-**|
 
 ## 5_gemm_cublas (4096 elements)
@@ -438,10 +457,19 @@ One may use numba or C strings to write CUDA kernels.
 ## default
 |Group|Name|Passed|Score|
 |-----|----|------|-----|
-|default|chekmaryov_petr|1/7|61|
-|default|lobanova_elizaveta|1/7|59|
-|default|pisarevsky_vadim|1/7|64|
-|default|smirnov_denis|3/7|188|
+|default|chekmaryov_petr|1/7|60|
+|default|chervyakov_ivan|1/7|53|
+|default|lobanova_elizaveta|2/7|119|
+|default|lukicheva_polina|2/7|99|
+|default|pigasin_dmitry|1/7|48|
+|default|pinegina_natalia|2/7|97|
+|default|pisarevsky_vadim|2/7|125|
+|default|smirnov_denis|4/7|244|
+|default|vikhrev_ivan|1/7|46|
+|default|zemskov_roman|0/7|0|
+|default|zinoviev_vladimir|3/7|173|
+|default|znamenskiy_mikhail|2/7|108|
+|default|zvorykin_aleksandr|2/7|110|
 
 Passed: 0
 

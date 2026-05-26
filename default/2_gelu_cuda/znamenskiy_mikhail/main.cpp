@@ -1,4 +1,4 @@
-#include <gelu_omp.h>
+#include <gelu_cuda.h>
 #include <cstddef>
 #include <iostream>
 #include <random>
@@ -7,7 +7,7 @@
 #include <chrono>
 
 namespace {
-    std::vector<float> GeluOMPRef(const std::vector<float>& input) {
+    std::vector<float> GeluRef(const std::vector<float>& input) {
         std::vector<float> result(input.size());
         for (size_t index = 0; index < input.size(); ++index) {
             float x = input[index];
@@ -33,18 +33,18 @@ std::cout << "Generating DONE" << std::endl;
 
 std::cout << "Ref calculations" << std::endl;
 std::chrono::steady_clock::time_point beginRef = std::chrono::steady_clock::now();
-auto resultRef = GeluOMPRef(inputData);
+auto resultRef = GeluRef(inputData);
 std::chrono::steady_clock::time_point endRef = std::chrono::steady_clock::now();
 std::cout << "Ref calculations DONE" << std::endl;
 std::cout << "Time REF = " << std::chrono::duration_cast<std::chrono::milliseconds>(endRef - beginRef).count() << "[ms]" << std::endl;
 
 std::cout << "Warming up" << std::endl;
-GeluOMP(inputData);
+GeluCUDA(inputData);
 std::cout << "Warming up DONE" << std::endl;
 
 std::cout << "Measurements" << std::endl;
 std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-auto result = GeluOMP(inputData);
+auto result = GeluCUDA(inputData);
 std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 std::cout << "Measurements done" << std::endl;
 std::cout << "Time OPT = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
