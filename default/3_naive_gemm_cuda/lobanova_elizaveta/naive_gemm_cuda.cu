@@ -37,7 +37,7 @@ std::vector<float> NaiveGemmCUDA(const std::vector<float>& a,
 
     dim3 threadsPerBlock(16, 16);
     dim3 blockCount((n + 16 - 1) / 16, (n + 16 - 1) / 16);
-    NaiveGemm<<<threadsPerBlock, blockCount>>>(devA, devB, devC, n);
+    NaiveGemm<<<blockCount, threadsPerBlock>>>(devA, devB, devC, n);
 
     std::vector<float> c(dataSize);
     cudaDeviceSynchronize();
