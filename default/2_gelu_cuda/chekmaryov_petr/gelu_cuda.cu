@@ -9,7 +9,7 @@ __global__ void geluKernel(float* res, const float* input, int n)
 {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     float x = input[idx];
-    float targ = 0.636619772368*(x+0.044715*x*x*x);
+    float targ = 0.797885*(x+0.044715*x*x*x);
     float th = 1 - 2. / (cuda::std::expf(2*targ)+1);
     if(idx < n)
         res[idx] = 0.5*x*(1.+th);
