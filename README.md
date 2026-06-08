@@ -456,6 +456,7 @@ One may use numba or C strings to write CUDA kernels.
 |Group|Name|Result|Rank|
 |-----|----|------|----|
 |default|zinoviev_vladimir|0.0346|2|
+|default|znamenskiy_mikhail|0.0379|3|
 |**FAST**|**FAST**|**0.0388**|**-**|
 |default|smirnov_denis|0.0438|1|
 |**REF**|**REF**|**0.0467**|**-**|
@@ -488,11 +489,11 @@ One may use numba or C strings to write CUDA kernels.
 |default|pigasin_dmitry|1/7|46|
 |default|pinegina_natalia|3/7|144|
 |default|pisarevsky_vadim|2/7|123|
-|default|smirnov_denis|6/7|363|
+|default|smirnov_denis|6/7|362|
 |default|vikhrev_ivan|2/7|99|
 |default|zemskov_roman|2/7|107|
 |default|zinoviev_vladimir|5/7|299|
-|default|znamenskiy_mikhail|4/7|216|
+|default|znamenskiy_mikhail|5/7|277|
 |default|zvorykin_aleksandr|2/7|109|
 
 Passed: 0
