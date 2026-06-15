@@ -3,6 +3,6 @@
 
 #include <vector>
 
-std::vector<float> SoftmaxCUDA(const std::vector<float>& input, int row_size);
+std::vector<float> SoftmaxCUDA(const std::vector<float>& input, int nrows);
 
 #endif // SOFTMAX_CUDA_H
