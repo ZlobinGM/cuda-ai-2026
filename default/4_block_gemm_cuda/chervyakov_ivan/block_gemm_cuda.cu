@@ -1,5 +1,9 @@
 #include "block_gemm_cuda.h"
 
+#include <device_launch_parameters.h>
+#include <cuda_runtime.h>
+#include <cuda/cmath>
+
 __global__ void blockGemmKernelExtShMem(const float *a, const float *b, float *c, int n, int blockSize)
 {
     extern __shared__ float shared_mem[];
@@ -41,9 +45,8 @@ __global__ void blockGemmKernelExtShMem(const float *a, const float *b, float *c
 std::vector<float> BlockGemmCUDA(const std::vector<float>& a,
                                  const std::vector<float>& b,
                                  int n) {
-    constexpr int blockSize = 16;
-    size_t sharedMemBytes = 2 * blockSize * blockSize * sizeof(float);
-
+    constexpr int tileSize = 16;
+    size_t sharedMemBytes = 2 * tileSize * tileSize * sizeof(float);
 
     size_t N = n * n;
     size_t size = N * sizeof(float);
@@ -57,29 +60,23 @@ std::vector<float> BlockGemmCUDA(const std::vector<float>& a,
     float *host_b = const_cast<float *>(b.data());
     float *host_c = const_cast<float *>(c.data());
 
-    cudaStream_t stream = nullptr;
-    cudaStreamCreate(&stream);
-
     cudaMalloc(&dev_a, size);
     cudaMalloc(&dev_b, size);
     cudaMalloc(&dev_c, size);
 
-    cudaHostRegister(const_cast<void *>(static_cast<const void *>(host_a)), size, cudaHostRegisterDefault);
-    cudaHostRegister(const_cast<void *>(static_cast<const void *>(host_b)), size, cudaHostRegisterDefault);
-    cudaHostRegister(const_cast<void *>(static_cast<const void *>(host_c)), size, cudaHostRegisterDefault);
+    cudaMemcpy(dev_a, host_a, size, cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_b, host_b, size, cudaMemcpyHostToDevice);
 
-    cudaMemcpyAsync(dev_a, host_a, size, cudaMemcpyHostToDevice, stream);
-    cudaMemcpyAsync(dev_b, host_b, size, cudaMemcpyHostToDevice, stream);
+    dim3 blockDims(tileSize, tileSize);
 
-    dim3 threads(blockSize, blockSize);
-    int blocksNum = cuda::ceil_div(n, blockSize);
-    dim3 blocks(blocksNum, blocksNum);
-    blockGemmKernelExtShMem<<<blocks, threads, sharedMemBytes, stream>>>(dev_a, dev_b, dev_c, n, blockSize);
+    int sizeGridDim = cuda::ceil_div(n, tileSize);
+    dim3 gidDims(sizeGridDim, sizeGridDim);
 
-    cudaMemcpyAsync(host_c, dev_c, size, cudaMemcpyDeviceToHost, stream);
+    blockGemmKernelExtShMem<<<gidDims, blockDims, sharedMemBytes>>>(dev_a, dev_b, dev_c, n, tileSize);
 
-    cudaStreamSynchronize(stream);
-    cudaStreamDestroy(stream);
+    cudaDeviceSynchronize();
+
+    cudaMemcpy(host_c, dev_c, size, cudaMemcpyDeviceToHost);
 
     cudaFree(dev_a);
     cudaFree(dev_b);
